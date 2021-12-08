@@ -48,6 +48,17 @@ class Graf:
         f.close()
         return L1, L
 
+    def Floyd_Citire(self):
+        f = open(self.file, "r")
+        n = int(f.readline())
+        M = []
+        for i in range(n):
+            l = [float('inf') if (e == 0) else e for e in [int(n) for n in f.readline().split()]]
+            l[i] = 0
+            M.append(l)
+        f.close()
+        return n, M
+
     def __init__(self, file, file2, cod):
         self.file = file
         self.file2 = file2
@@ -64,6 +75,8 @@ class Graf:
             self.L1, self.L = self.Multimi_Disjuncte()
         if cod == 5:
             self.L1, self.L = self.Drum_Minim()
+        if cod == 6:
+            self.L1, self.L = self.Floyd_Citire()
 
     def BFS(self):
         g = open(self.file2, "w")
@@ -318,7 +331,7 @@ class Graf:
         stop = 0
         flag = True
         while q:
-            if stop == n * m:
+            if stop == n*m:
                 flag = False
                 break
             stop += 1
@@ -333,6 +346,55 @@ class Graf:
         else:
             g.write("Ciclu negativ!")
         g.close()
+
+    def Darb(self):
+        g = open(self.file2, "w")
+        n = self.L1[0]
+        L = self.L
+        viz = (n + 1) * [False]
+        viz[1] = True
+        r = 1
+        u = 1
+
+        def DFS(n, h):
+            nonlocal r, u
+            h += 1
+            if h > r:
+                r = h
+                u = n
+            viz[n] = True
+            for k in L[n]:
+                if viz[k] is False:
+                    DFS(k, h)
+
+        def DFS2(n, h):
+            nonlocal r
+            h += 1
+            if h > r:
+                r = h
+            viz[n] = False
+            for k in L[n]:
+                if viz[k]:
+                    DFS2(k, h)
+
+        DFS(1, 0)
+        r = 0
+        DFS2(u, 0)
+        g.write(str(r))
+        g.close()
+
+    def RoyFloyd(self):
+        g = open(self.file2, "w")
+        n = self.L1
+        M = self.L
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):
+                    if M[i][j] > M[i][k] + M[k][j]:
+                        M[i][j] = M[i][k] + M[k][j]
+        g.write(('\n'.join([' '.join([str(i) for i in l]) for l in M])))
+        g.close()
+
 Graf_a = Graf("bfs.in", "bfs.out", 2)
 Graf_a.BFS()
 Graf_b = Graf("ctc.in", "ctc.out", 2)
@@ -353,3 +415,7 @@ Graf_i = Graf("dijkstra.in", "dijkstra.out", 5)
 Graf_i.Dijkstra()
 Graf_j = Graf("bellmanford.in", "bellmanford.out", 5)
 Graf_j.Bellman()
+Graf_k = Graf("darb.in", "darb.out", 1)
+Graf_k.Darb()
+Graf_l = Graf("royfloyd.in", "royfloyd.out", 6)
+Graf_l.RoyFloyd()
