@@ -395,6 +395,26 @@ class Graf:
         g.write(('\n'.join([' '.join([str(i) for i in l]) for l in M])))
         g.close()
 
+    def Euler(self):
+        g = open(self.file2, "w")
+        n = self.L1[0]
+        L = self.L
+        for i in range(1, n):
+            if len(L[i]) % 2:
+                g.write("-1")
+                return None
+        circuit = []
+        drum = collections.deque()
+        drum.append(1)
+        while drum:
+            u = drum[-1]
+            if L[u]:
+                v = L[u].pop()
+                drum.append(v)
+                L[v].remove(u)
+            else:
+                circuit.append(drum.pop())
+        g.write(" ".join(str(x) for x in circuit[:-1]))
 Graf_a = Graf("bfs.in", "bfs.out", 2)
 Graf_a.BFS()
 Graf_b = Graf("ctc.in", "ctc.out", 2)
@@ -419,3 +439,5 @@ Graf_k = Graf("darb.in", "darb.out", 1)
 Graf_k.Darb()
 Graf_l = Graf("royfloyd.in", "royfloyd.out", 6)
 Graf_l.RoyFloyd()
+Graf_m = Graf("ciclueuler.in", "ciclueuler.out", 1)
+Graf_m.Euler()
