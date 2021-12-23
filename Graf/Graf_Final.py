@@ -426,7 +426,7 @@ class Graf:
         g.write(" ".join(str(x) for x in circuit[:-1]))
 
 
-# Functie meniu a alege ce problema sa fie rezolvata
+# Functie meniu pentru a alege ce problema sa fie rezolvata
 def Meniu():
     n = int(input(
         "1 BFS\n2 CTC\n3 DFS\n4 Havel-Hakimi\n5 Sortare topologica\n6 Muchie critica\n7 Kruskal\n8 Multimi "
